@@ -204,8 +204,8 @@ void write_u(user w)
     strcpy(add,"C:\\MinGW\\c#\\mini_project\\");
     strcat(add,w.user);
     strcat(add,".csv");
-    const char *new =add;
-    FILE *f=fopen(new,"w");
+    const char *address = add;
+    FILE *f=fopen(address,"w");
     fprintf(f,"%s,%s,%s\n","website","username","password");
     fclose(f);
 }
@@ -431,84 +431,93 @@ int main()
            
         }while( stat != 2 && count<3);
         if(stat == 2)
-        {   char add[200];
+        {   
+            char add[200];
             strcat(add,"C:\\MinGW\\c#\\mini_project\\");
             strcat(add,s);
             strcat(add,".csv");
             const char *address =add;
-            fflush(stdin);
-            printf("CHOOSE AN OPTION\nTO SAVE A NEW PASSWORD:1\nSEARCH FOR A PASSWORD:2\nEDIT PASSWORD:3\n");
-            scanf("%d",&n);
-            switch(n)
-            {
-                case 1:
-                {   
-                int count=0;
+            char t[10];
+            do
+            { 
+                
                 fflush(stdin);
-                printf("ENTER THE WEBSITE NAME: ");
-                scanf("%[^\n]s",&w.web_name);
-                fflush(stdin);
-                printf("ENTER THE USERNAME: ");
-                scanf("%[^\n]s",&w.username);
-                do
+                printf("CHOOSE AN OPTION\nTO SAVE A NEW PASSWORD:1\nSEARCH FOR A PASSWORD:2\nEDIT PASSWORD:3\n");
+                scanf("%d",&n);
+                switch(n)
                 {
-                    fflush(stdin);
-                    count++;
-                    if (count>2)
+                    case 1:
                     {   
-                    char ans;
-                    do{
+                        
+                            int count=0;
                         fflush(stdin);
-                        printf("DO YOU WANT TO GENERATE A RANDOM PASSWORD\nY/N:");
-                        scanf("%c",&ans);
-                    }while(ans != 'Y' && ans!='N');
-                    if(ans == 'Y')
+                        printf("ENTER THE WEBSITE NAME: ");
+                        scanf("%[^\n]s",&w.web_name);
+                        fflush(stdin);
+                        printf("ENTER THE USERNAME: ");
+                        scanf("%[^\n]s",&w.username);
+                        do
                         {
-                            do 
-                            {
-                                generatePassword(w.pass);
-                            } while (strength_check(w.pass));
-                            printf("Generated Password: %s\n", w.pass);
-                            break;
+                            fflush(stdin);
+                            count++;
+                            if (count>2)
+                            {   
+                            char ans;
+                            do{
+                                fflush(stdin);
+                                printf("DO YOU WANT TO GENERATE A RANDOM PASSWORD\nY/N:");
+                                scanf("%c",&ans);
+                            }while(ans != 'Y' && ans!='N');
+                            if(ans == 'Y')
+                                {
+                                    do 
+                                    {
+                                        generatePassword(w.pass);
+                                    } while (strength_check(w.pass));
+                                    printf("Generated Password: %s\n", w.pass);
+                                    break;
 
-                        }
+                                }
+                            }
+                            fflush(stdin);
+                            printf("ENTER THE PASSWORD: ");
+                            scanf("%[^\n ]s",&w.pass);
+                        }while(strength_check(w.pass));
+                        write(w,address);
+                        printf("DETAILS STORED SUCCESFULLY\n");
+                        break;
                     }
-                    fflush(stdin);
-                    printf("ENTER THE PASSWORD: ");
-                    scanf("%[^\n ]s",&w.pass);
-                }while(strength_check(w.pass));
-                write(w,address);
-                printf("DETAILS STORED SUCCESFULLY\n");
-                break;
-                }
-                case 2:
-                {   
-                    char key[100];
-                    fflush(stdin);
-                    printf("ENTER THE WEBSITE TO BE SEARCHED\n");
-                    scanf("%[^\n]s",&key);
-                    char pass[100];
-                    search(key,address);
-                    break;
-                }
-                case 3:
-                {
-                    char key[100];
-                    fflush(stdin);
-                    printf("ENTER THE WEBSITE TO BE SEARCHED\n");
-                    scanf("%[^\n]s",&key);
-                    char pass[100];
-                    edit(key,address);
-                    break;
-                }
-                default: {printf("INVALID CHOICE");break;}
+                    case 2:
+                    {   
+                        char key[100];
+                        fflush(stdin);
+                        printf("ENTER THE WEBSITE TO BE SEARCHED\n");
+                        scanf("%[^\n]s",&key);
+                        char pass[100];
+                        search(key,address);
+                        break;
+                    }
+                    case 3:
+                    {
+                        char key[100];
+                        fflush(stdin);
+                        printf("ENTER THE WEBSITE TO BE SEARCHED\n");
+                        scanf("%[^\n]s",&key);
+                        char pass[100];
+                        edit(key,address);
+                        break;
+                    }
+                    default: {printf("INVALID CHOICE");break;}
 
-            }
+                }
+                fflush(stdin);
+                printf("TYPE EXIT TO END THE PROGRAM\nTYPE ANYTHING ELSE TO CONTINUE\n");
+                scanf("%s",&t);
+            }while(strcmp(t,"exit")!=0 && strcmp(t,"EXIT")!=0);
         }
         else 
         {
             printf("TERMINATING EXECUTION DUE TO TOO MANY TRIES\n");
-            break;
         }
         break;
     }
